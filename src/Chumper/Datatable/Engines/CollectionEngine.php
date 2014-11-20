@@ -1,6 +1,6 @@
 <?php namespace Chumper\Datatable\Engines;
 
-use Illuminate\Support\Collection;
+use Illuminate\Support\Collection, Log;
 
 /**
  * This handles the collections,
@@ -182,7 +182,7 @@ class CollectionEngine extends BaseEngine {
                 
                 // sburkett - added support for exact matching on specific columns
                 if(@$this->columnSearchExact[ $self->getNameByIndex($i) ] == 1) {
-                  if($toSearch[$i] == $search) {
+                  if(!empty($search) && $toSearch[$i] == $search) {
                     return true;
                   }
                 }
