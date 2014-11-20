@@ -1,9 +1,9 @@
 {
-    "name": "chumper/datatable",
-    "description": "This is a laravel 4 package for the server and client side of datatablaes at http://datatables.net/",
+    "name": "IvBre/datatable",
+    "description": "For from chumper repo. This is a laravel 4 package for the server and client side of datatablaes at http://datatables.net/",
     "keywords" : ["laravel","datatables", "ajax", "jquery"],
     "license": "MIT",
-    "homepage": "http://github.com/Chumper/datatable",
+    "homepage": "http://github.com/IvBre/datatable",
     "authors": [
         {
             "name": "Nils Plaschke",
