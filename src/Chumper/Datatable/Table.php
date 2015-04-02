@@ -198,6 +198,39 @@ class Table {
         else
             throw new Exception('Invalid number of callbacks provided for the method "setCallbacks"');
 
+        /**
+         * Save search value in session
+         */
+        $this->callbacks['stateSaveParams'] = "function(oSettings,oData){
+            var valueName = 'searchValue' + $('.dataTables_filter input').attr('id'),
+                wordList = JSON.parse(sessionStorage.getItem(valueName));
+
+            $('.dataTables_filter input').keyup(function(){
+                if($(this).val() === ''){
+                    //Remove session
+                    sessionStorage.removeItem(valueName);
+                }
+            });
+
+            if(oData.search.search !== ''){
+                //Save search value in session
+                sessionStorage.setItem(valueName, JSON.stringify(oData.search.search));
+            }else{
+                //Set search value from session
+                if(wordList !== null){
+
+                    //Change value and trigger search event
+                    $.fn.changeVal = function (v) {
+                        $('.dataTables_filter input').trigger('keyup.DT');
+                        return $(this).val(v).trigger('change keyup.DT');
+                    }
+
+                    $('.dataTables_filter input').changeVal(wordList);
+                    $('.dataTables_filter input').trigger('keyup.DT');
+                }
+            }
+        }";
+
         return $this;
     }
 
