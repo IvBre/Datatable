@@ -199,9 +199,38 @@ class Table {
             throw new Exception('Invalid number of callbacks provided for the method "setCallbacks"');
 
         /**
-         * Save search value in session
+         * Save search and filter values in session
          */
+
+        $this->callbacks['drawCallback'] = "function(oSettings,oData){
+            /*
+            ** Set filter values in session
+            */
+            $('tfoot tr th').each(function(i){
+
+                var selectValueName = $(this).attr('class'),
+                    filterSession = sessionStorage.getItem(selectValueName);
+
+                //Set filter values from session
+                if(filterSession != null && typeof filterSession != 'undefined'){
+                    var selectEl = '.'+selectValueName;
+
+                    function triggerChange() {
+                       $(selectEl + ' option[value='+filterSession+']').attr('selected', 'selected');
+                       $(selectEl+' select').trigger('change');
+                    }
+
+                    // use setTimeout() to execute
+                    setTimeout(triggerChange, 1000);
+
+                }
+
+            });
+        }";
         $this->callbacks['stateSaveParams'] = "function(oSettings,oData){
+            /*
+            ** Save search value in session
+            */
             var valueName = 'searchValue' + $('.dataTables_filter input').attr('id'),
                 wordList = JSON.parse(sessionStorage.getItem(valueName));
 
@@ -229,6 +258,32 @@ class Table {
                     $('.dataTables_filter input').trigger('keyup.DT');
                 }
             }
+
+            /*
+            ** Save filters in session
+            */
+            $('tfoot tr th').each(function(i){
+
+                var selectValueName = $(this).attr('class'),
+                    filterValue = $(this).find('select').val(),
+                    filterSession = sessionStorage.getItem(selectValueName);
+
+                if(filterValue !== '' && typeof filterValue !== 'undefined'){
+
+                    //Save search value in session
+                    sessionStorage.setItem(selectValueName, JSON.stringify(filterValue));
+
+                }
+
+                if(filterValue === ''){
+                    //Remove filter from session
+                    var selectEl = '.'+selectValueName;
+                    sessionStorage.removeItem(selectValueName);
+                    $(selectEl + ' option:first-child').attr('selected', true);
+                }
+
+            });
+
         }";
 
         return $this;
